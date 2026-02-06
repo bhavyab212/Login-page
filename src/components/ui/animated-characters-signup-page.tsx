@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff, Sparkles } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { Boxes } from "@/components/ui/background-boxes";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { AnimatedFormCard } from "@/components/ui/animated-form-card";
@@ -379,18 +379,12 @@ function SignUpPage({ onNavigate, onSignupSuccess }: SignUpPageProps) {
                     ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}
                 >
                     <div className="relative z-20">
-                        <div className="flex items-center gap-2 text-lg font-semibold">
-                            <div className={`size-8 rounded-lg backdrop-blur-sm flex items-center justify-center transition-colors duration-200
-                                ${theme === 'dark'
-                                    ? 'bg-primary-foreground/10'
-                                    : 'bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-violet-500/30'
-                                }`}
+                        <div className="relative z-20">
+                            <div className={`flex items-center gap-2 text-2xl font-black tracking-widest uppercase font-mono border-b-2 pb-1 inline-block transition-colors duration-200
+                            ${theme === 'dark' ? 'text-cyan-400 border-cyan-400' : 'text-blue-600 border-blue-600'}`}
                             >
-                                <Sparkles className={`size-4 ${theme === 'light' ? 'text-white' : ''}`} />
+                                NetListLab
                             </div>
-                            <span className={theme === 'light' ? 'bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent font-bold' : ''}>
-                                YourBrand
-                            </span>
                         </div>
                     </div>
 
@@ -585,62 +579,59 @@ function SignUpPage({ onNavigate, onSignupSuccess }: SignUpPageProps) {
 
                 {/* Right Sign Up Section */}
                 <div className="relative flex items-center justify-center p-8 overflow-hidden pointer-events-none">
-                    {/* Wavy Background Effect - Theme aware */}
+                    {/* Wavy Background Effect - Electronics Vibe */}
                     <WavyBackground
                         containerClassName="absolute inset-0"
                         colors={theme === 'dark'
-                            ? ["#FFD700", "#FF8C00", "#C71585", "#4B0082", "#4169E1"]
-                            : ["#E879F9", "#A78BFA", "#60A5FA", "#34D399", "#FBBF24"]
+                            ? ["#00F0FF", "#00FF99", "#FF0055", "#FFD700", "#7000FF"] // Cyber: Cyan, Neon Green, Pink, Gold, Purple
+                            : ["#2563EB", "#F59E0B", "#10B981", "#6366F1", "#EC4899"]  // Lab: Tech Blue, Copper, Emerald, Indigo, Pink
                         }
-                        waveWidth={70}
-                        backgroundFill={theme === 'dark' ? "rgba(15, 23, 42, 0.9)" : "rgba(255, 251, 245, 0.6)"}
-                        blur={15}
-                        speed="slow"
-                        waveOpacity={theme === 'dark' ? 0.3 : 0.2}
+                        waveWidth={60}
+                        backgroundFill={theme === 'dark' ? "rgba(10, 15, 30, 0.95)" : "rgba(245, 250, 255, 0.9)"}
+                        blur={12}
+                        speed="fast"
+                        waveOpacity={theme === 'dark' ? 0.4 : 0.3}
                     >
                         <div />
                     </WavyBackground>
 
-                    {/* Enhanced Glassmorphic container - Theme aware */}
+                    {/* Enhanced Glassmorphic container - Tech/Electronics Vibe */}
                     <AnimatedFormCard
                         pageKey="signup"
-                        className={`relative w-full max-w-[420px] backdrop-blur-xl rounded-3xl p-9 pointer-events-auto overflow-hidden transition-all duration-200
+                        className={`relative w-full max-w-[420px] backdrop-blur-xl rounded-2xl p-9 pointer-events-auto overflow-hidden transition-all duration-200
                             ${theme === 'dark'
-                                ? 'bg-white/5 shadow-[0_0_60px_rgba(234,179,8,0.4)] border border-white/20 ring-1 ring-white/10'
-                                : 'bg-white/90 shadow-[0_8px_40px_rgba(139,92,246,0.25)] border border-violet-200/50 ring-1 ring-violet-100/50'
+                                ? 'bg-slate-900/80 shadow-[0_0_50px_rgba(0,240,255,0.25)] border border-cyan-500/30 ring-1 ring-cyan-400/20'
+                                : 'bg-white/90 shadow-[0_8px_40px_rgba(37,99,235,0.2)] border border-blue-200 ring-1 ring-blue-100'
                             }`}
                     >
-                        {/* Shimmer/Reflection effect */}
-                        <div className={`absolute inset-0 pointer-events-none ${theme === 'dark' ? 'bg-white/5' : 'bg-gradient-to-br from-white/40 to-transparent'}`} />
-                        <div className={`absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl via-transparent to-transparent opacity-30 pointer-events-none
-                            ${theme === 'dark' ? 'from-white/10' : 'from-violet-200/30'}`}
-                        />
+                        {/* Circuit/Tech Grid Overlay Effect */}
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
 
-                        {/* Mobile Logo */}
-                        <div className={`lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12
-                            ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}
+                        {/* Scanning Line Effect (Dark Mode) */}
+                        {theme === 'dark' && (
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent h-[200%] w-full animate-scan pointer-events-none" />
+                        )}
+
+                        {/* Mobile Brand (No Logo, Tech Font) */}
+                        <div className={`lg:hidden flex items-center justify-center mb-12
+                            ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'}`}
                         >
-                            <div className={`size-8 rounded-lg flex items-center justify-center
-                                ${theme === 'dark' ? 'bg-primary/10' : 'bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg'}`}
-                            >
-                                <Sparkles className={`size-4 ${theme === 'dark' ? 'text-primary' : 'text-white'}`} />
-                            </div>
-                            <span className={theme === 'light' ? 'bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent font-bold' : ''}>
-                                YourBrand
+                            <span className="text-2xl font-black tracking-widest uppercase font-mono border-b-2 border-current pb-1">
+                                NetListLab
                             </span>
                         </div>
 
                         {/* Header */}
                         <div className="text-center mb-10 relative z-10">
                             <h1 className={`text-4xl font-black tracking-tighter mb-3 drop-shadow-md transition-colors duration-200
-                                ${theme === 'dark' ? 'text-white' : 'bg-gradient-to-r from-violet-700 via-purple-600 to-indigo-700 bg-clip-text text-transparent'}`}
+                                ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}
                             >
-                                Create an account
+                                INIT PROTOCOL
                             </h1>
-                            <p className={`text-sm font-extrabold tracking-wide transition-colors duration-200
-                                ${theme === 'dark' ? 'text-white/80' : 'text-slate-500'}`}
+                            <p className={`text-xs font-bold tracking-[0.2em] transition-colors duration-200 uppercase font-mono
+                                ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-500'}`}
                             >
-                                GET STARTED WITH YOUR FREE ACCOUNT
+                                Register New Operative
                             </p>
                         </div>
 

@@ -56,8 +56,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
                     }`}
                 style={{
                     background: theme === 'dark'
-                        ? 'radial-gradient(circle at center, rgba(139, 92, 246, 0.3), rgba(0,0,0,0.8))'
-                        : 'radial-gradient(circle at center, rgba(251, 191, 36, 0.3), rgba(255,255,255,0.9))'
+                        ? 'radial-gradient(circle at center, rgba(0, 240, 255, 0.3), rgba(0,0,0,0.8))' // Cyan for dark mode
+                        : 'radial-gradient(circle at center, rgba(37, 99, 235, 0.3), rgba(255,255,255,0.9))' // Blue for light mode
                 }}
             />
             {children}
