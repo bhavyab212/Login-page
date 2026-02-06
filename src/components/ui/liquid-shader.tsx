@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 export interface InteractiveNebulaShaderProps {
-    hasActiveReminders?: boolean;
-    hasUpcomingReminders?: boolean;
-    disableCenterDimming?: boolean;
-    className?: string;
+  hasActiveReminders?: boolean;
+  hasUpcomingReminders?: boolean;
+  disableCenterDimming?: boolean;
+  className?: string;
 }
 
 /**
@@ -15,39 +15,39 @@ export interface InteractiveNebulaShaderProps {
  * Props drive three GLSL uniforms—no demo markup here.
  */
 export function InteractiveNebulaShader({
-    hasActiveReminders = false,
-    hasUpcomingReminders = false,
-    disableCenterDimming = false,
-    className = "",
+  hasActiveReminders = false,
+  hasUpcomingReminders = false,
+  disableCenterDimming = false,
+  className = "",
 }: InteractiveNebulaShaderProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const materialRef = useRef<THREE.ShaderMaterial>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const materialRef = useRef<THREE.ShaderMaterial | null>(null);
 
-    // Sync props into uniforms
-    useEffect(() => {
-        const mat = materialRef.current;
-        if (mat) {
-            mat.uniforms.hasActiveReminders.value = hasActiveReminders;
-            mat.uniforms.hasUpcomingReminders.value = hasUpcomingReminders;
-            mat.uniforms.disableCenterDimming.value = disableCenterDimming;
-        }
-    }, [hasActiveReminders, hasUpcomingReminders, disableCenterDimming]);
+  // Sync props into uniforms
+  useEffect(() => {
+    const mat = materialRef.current;
+    if (mat) {
+      mat.uniforms.hasActiveReminders.value = hasActiveReminders;
+      mat.uniforms.hasUpcomingReminders.value = hasUpcomingReminders;
+      mat.uniforms.disableCenterDimming.value = disableCenterDimming;
+    }
+  }, [hasActiveReminders, hasUpcomingReminders, disableCenterDimming]);
 
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-        // Renderer, scene, camera, clock
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        container.appendChild(renderer.domElement);
+    // Renderer, scene, camera, clock
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        const clock = new THREE.Clock();
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const clock = new THREE.Clock();
 
-        // Vertex shader: pass UVs
-        const vertexShader = `
+    // Vertex shader: pass UVs
+    const vertexShader = `
       varying vec2 vUv;
       void main() {
         vUv = uv;
@@ -55,8 +55,8 @@ export function InteractiveNebulaShader({
       }
     `;
 
-        // Ray-marched nebula fragment shader with reminder-driven palettes
-        const fragmentShader = `
+    // Ray-marched nebula fragment shader with reminder-driven palettes
+    const fragmentShader = `
       precision mediump float;
       uniform vec2 iResolution;
       uniform float iTime;
@@ -116,57 +116,57 @@ export function InteractiveNebulaShader({
       }
     `;
 
-        // Uniforms
-        const uniforms = {
-            iTime: { value: 0 },
-            iResolution: { value: new THREE.Vector2() },
-            iMouse: { value: new THREE.Vector2() },
-            hasActiveReminders: { value: hasActiveReminders },
-            hasUpcomingReminders: { value: hasUpcomingReminders },
-            disableCenterDimming: { value: disableCenterDimming },
-        };
+    // Uniforms
+    const uniforms = {
+      iTime: { value: 0 },
+      iResolution: { value: new THREE.Vector2() },
+      iMouse: { value: new THREE.Vector2() },
+      hasActiveReminders: { value: hasActiveReminders },
+      hasUpcomingReminders: { value: hasUpcomingReminders },
+      disableCenterDimming: { value: disableCenterDimming },
+    };
 
-        const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms });
-        materialRef.current = material;
-        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
-        scene.add(mesh);
+    const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms });
+    materialRef.current = material;
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+    scene.add(mesh);
 
-        // Resize & mouse
-        const onResize = () => {
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-            renderer.setSize(w, h);
-            uniforms.iResolution.value.set(w, h);
-        };
-        const onMouseMove = (e: MouseEvent) => {
-            uniforms.iMouse.value.set(e.clientX, window.innerHeight - e.clientY);
-        };
-        window.addEventListener("resize", onResize);
-        window.addEventListener("mousemove", onMouseMove);
-        onResize();
+    // Resize & mouse
+    const onResize = () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      renderer.setSize(w, h);
+      uniforms.iResolution.value.set(w, h);
+    };
+    const onMouseMove = (e: MouseEvent) => {
+      uniforms.iMouse.value.set(e.clientX, window.innerHeight - e.clientY);
+    };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("mousemove", onMouseMove);
+    onResize();
 
-        // Animation loop
-        renderer.setAnimationLoop(() => {
-            uniforms.iTime.value = clock.getElapsedTime();
-            renderer.render(scene, camera);
-        });
+    // Animation loop
+    renderer.setAnimationLoop(() => {
+      uniforms.iTime.value = clock.getElapsedTime();
+      renderer.render(scene, camera);
+    });
 
-        return () => {
-            window.removeEventListener("resize", onResize);
-            window.removeEventListener("mousemove", onMouseMove);
-            renderer.setAnimationLoop(null);
-            container.removeChild(renderer.domElement);
-            material.dispose();
-            mesh.geometry.dispose();
-            renderer.dispose();
-        };
-    }, []);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("mousemove", onMouseMove);
+      renderer.setAnimationLoop(null);
+      container.removeChild(renderer.domElement);
+      material.dispose();
+      mesh.geometry.dispose();
+      renderer.dispose();
+    };
+  }, []);
 
-    return (
-        <div
-            ref={containerRef}
-            className={`fixed inset-0 bg-background ${className}`}
-            aria-label="Interactive nebula background"
-        />
-    );
+  return (
+    <div
+      ref={containerRef}
+      className={`fixed inset-0 bg-background ${className}`}
+      aria-label="Interactive nebula background"
+    />
+  );
 }
